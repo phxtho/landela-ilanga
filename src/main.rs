@@ -22,6 +22,6 @@ fn main() {
         }
     }
 
-    let mut file = File::create("image.ppm").unwrap();
+    let mut file = File::create("./output/image.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
