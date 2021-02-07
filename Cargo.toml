@@ -1,5 +1,5 @@
 [package]
-name = "landela-ilanga"
+name = "landela_ilanga"
 version = "0.1.0"
 authors = ["phxtho <phathopukwana@gmail.com>"]
 edition = "2018"
