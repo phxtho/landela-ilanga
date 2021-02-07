@@ -2,6 +2,10 @@ use std::fs::File;
 use std::io::Write;
 
 fn main() {
+    basic_ppt_image();
+}
+
+fn basic_ppt_image() {
     // Image
     let  image_width:u32 = 256;
     let  image_height:u32 = 256;
