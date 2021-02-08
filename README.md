@@ -4,4 +4,10 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 
 ## Progress
 
+Chapter 1-3
+
 ![](./images/ppmimage.png)
+
+Chapter 4
+
+![](./images/ray_image.png)
