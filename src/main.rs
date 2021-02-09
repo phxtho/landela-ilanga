@@ -5,8 +5,6 @@ use landela_ilanga::structures::ray::Ray;
 
 fn main() {
     gradient_image();
-
-    //basic_ppt_image();
 }
 
 fn basic_ppt_image() {
@@ -36,9 +34,8 @@ fn ray_color(r : &Ray) -> Vec3{
 }
 
 fn write_colour (vector : & Vec3) -> String {
-    let mut colour = *vector * 255.99;
-    colour.colourize();
-    let output = format!("{} {} {}\n",colour.r(),colour.g(),colour.b()); 
+    let colour = *vector * 255.99;
+    let output = format!("{} {} {}\n",colour.r().floor(),colour.g().floor(),colour.b().floor()); 
     return output;
 }
 
@@ -63,8 +60,8 @@ fn gradient_image() {
 
     for j in (0..image_height).rev() {
         for i in 0..image_width {
-            let u = i/(image_width - 1);
-            let v = j/(image_height - 1);
+            let u : f64 = i as f64/(image_width-1) as f64;
+            let v : f64 = j as f64 /(image_height-1) as f64;
             let r = Ray::new(origin,lower_left_corner + (u as f64 * horizontal) + (v as f64 * vertical) - origin);
             let pixel_colour = ray_color(&r);
             output.push_str(&write_colour(&pixel_colour));
