@@ -7,6 +7,12 @@ fn main() {
     gradient_image();
 }
 
+fn write_colour (vector : & Vec3) -> String {
+    let colour = *vector * 255.99;
+    let output = format!("{} {} {}\n",colour.r().floor(),colour.g().floor(),colour.b().floor()); 
+    return output;
+}
+
 fn basic_ppt_image() {
     // Image
     let  image_width:u32 = 256;
@@ -27,16 +33,22 @@ fn basic_ppt_image() {
     file.write_all(output.as_bytes()).unwrap()
 }
 
+fn hit_sphere(center: &Vec3, radius :f64, r:&Ray) -> bool {
+    let oc : Vec3 = r.origin - *center;
+    let a = r.direction.dot(&r.direction);
+    let b = 2.0 * oc.dot(&r.direction);
+    let c = oc.dot(&oc) - radius*radius;
+    let discriminant = b * b - 4.0*a*c;
+    discriminant > 0.0
+}
+
 fn ray_color(r : &Ray) -> Vec3{
+    if hit_sphere(&Vec3::new(0.0,0.0,-1.0), 0.5, r) {
+        return Vec3::new(1.0,0.0,0.0);
+    }
     let unit_direction = r.direction.unit_vector();
     let t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 -t) * Vec3::new(1.0,1.0,1.0) + t * Vec3::new(0.5,0.7,1.0);
-}
-
-fn write_colour (vector : & Vec3) -> String {
-    let colour = *vector * 255.99;
-    let output = format!("{} {} {}\n",colour.r().floor(),colour.g().floor(),colour.b().floor()); 
-    return output;
 }
 
 fn gradient_image() {
@@ -68,6 +80,6 @@ fn gradient_image() {
         }
     }
 
-    let mut file = File::create("./output/ray_image.ppm").unwrap();
+    let mut file = File::create("./output/ray_sphere_image.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
