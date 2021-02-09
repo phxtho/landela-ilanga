@@ -4,10 +4,14 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 
 ## Progress
 
-Chapter 1-3
+1-3: Generate PPM image
 
-![](./images/ppmimage.png)
+![1-3: Basic PPM image](./images/ppmimage.png)
 
-Chapter 4
+4: Ray based gradient image
 
-![](./images/ray_image.png)
+![4 Ray based gradient](./images/ray_image.png)
+
+5: Ray & sphere intersection
+
+![5 Ray sphere intersection](./images/ray_sphere_image.png)
