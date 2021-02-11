@@ -5,7 +5,7 @@ use landela_ilanga::structures::hittable::{HittableList, Hittable, HitRecord};
 use landela_ilanga::objects::sphere::Sphere;
 
 fn main() {
-    gradient_image();
+    render_image();
 }
 
 fn write_colour (vector : & Vec3) -> String {
@@ -14,40 +14,6 @@ fn write_colour (vector : & Vec3) -> String {
     return output;
 }
 
-fn basic_ppt_image() {
-    // Image
-    let  image_width:u32 = 256;
-    let  image_height:u32 = 256;
-
-    // Render
-    let mut output = format!("P3\n {} {} \n255\n", image_width, image_height);
-
-    for j in 0..image_height {
-        for i in 0..image_width {
-            let mut colour = Vec3::new(i as f64/((image_width-1) as f64), j as f64/((image_height-1) as f64), 0.25 ) * 255.999 ;
-            colour.colourize();
-            output.push_str(&write_colour(&colour));
-        }
-    }
-
-    let mut file = File::create("./output/image.ppm").unwrap();
-    file.write_all(output.as_bytes()).unwrap()
-}
-
-fn hit_sphere(center: &Vec3, radius :f64, r:&Ray) -> f64 {
-    // solve quadratic formula for (P(t)−C)⋅(P(t)−C)=r^2
-    let oc : Vec3 = r.origin - *center;
-    let a = r.direction.length_squared();
-    let half_b = oc.dot(&r.direction);
-    let c = oc.length_squared() - radius*radius;
-    let discriminant = half_b * half_b - a*c;
-
-    if discriminant < 0.0 {
-        return -1.0;
-    }else {
-        return (-half_b - discriminant.sqrt())/(2.0 * a);
-    } 
-}
 
 fn ray_color(r : &Ray, world : &dyn Hittable) -> Vec3{
     let mut rec = HitRecord::new();
@@ -61,7 +27,7 @@ fn ray_color(r : &Ray, world : &dyn Hittable) -> Vec3{
     return (1.0 -t) * Vec3::new(1.0,1.0,1.0) + t * Vec3::new(0.5,0.7,1.0);
 }
 
-fn gradient_image() {
+fn render_image() {
     // Image
     let aspect_ratio = 16.0/9.0;
     let image_width : u32 = 400;
