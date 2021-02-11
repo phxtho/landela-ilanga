@@ -134,6 +134,10 @@ impl Vec3 {
         (self.x() * self.x() + self.y() * self.y() + self.z() * self.z()).sqrt()
     }
 
+    pub fn length_squared(&self) -> f64 {
+        self.x() * self.x() + self.y() * self.y() + self.z() * self.z()
+    }
+
     pub fn unit_vector(&self) -> Vec3 {
         Vec3{elements: [self.x() / self.length(),
             self.y() / self.length(),
