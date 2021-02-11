@@ -15,3 +15,7 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 5: Ray & sphere intersection
 
 ![5 Ray sphere intersection](./images/ray_sphere_image.png)
+
+6.1: Sphere normals
+
+![6.1 Sphere normals](./images/sphere_normals.png)

@@ -33,21 +33,35 @@ fn basic_ppt_image() {
     file.write_all(output.as_bytes()).unwrap()
 }
 
-fn hit_sphere(center: &Vec3, radius :f64, r:&Ray) -> bool {
+fn hit_sphere(center: &Vec3, radius :f64, r:&Ray) -> f64 {
+    // solve quadratic formula for (P(t)−C)⋅(P(t)−C)=r^2
     let oc : Vec3 = r.origin - *center;
     let a = r.direction.dot(&r.direction);
     let b = 2.0 * oc.dot(&r.direction);
     let c = oc.dot(&oc) - radius*radius;
     let discriminant = b * b - 4.0*a*c;
-    discriminant > 0.0
+
+    if discriminant < 0.0 {
+        return -1.0;
+    }else {
+        return (-b - discriminant.sqrt())/(2.0 * a);
+    } 
 }
 
 fn ray_color(r : &Ray) -> Vec3{
-    if hit_sphere(&Vec3::new(0.0,0.0,-1.0), 0.5, r) {
-        return Vec3::new(1.0,0.0,0.0);
+    let sphere_center = Vec3::new(0.0,0.0,-1.0);
+    let mut t = hit_sphere(&sphere_center, 0.5, r);
+    
+    // Ray intersects with the sphere
+    if t > 0.0 {
+        // surface normal is a unit vector from the center of the sphere
+        // to the point where the ray intersects the surface
+        let n = (r.at(t) - sphere_center).unit_vector(); 
+        return 0.5 * Vec3::new(n.x() + 1.0, n.y() + 1.0, n.z() + 1.0);
     }
+
     let unit_direction = r.direction.unit_vector();
-    let t = 0.5 * (unit_direction.y() + 1.0);
+    t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 -t) * Vec3::new(1.0,1.0,1.0) + t * Vec3::new(0.5,0.7,1.0);
 }
 
@@ -80,6 +94,6 @@ fn gradient_image() {
         }
     }
 
-    let mut file = File::create("./output/ray_sphere_image.ppm").unwrap();
+    let mut file = File::create("./output/sphere_normals.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
