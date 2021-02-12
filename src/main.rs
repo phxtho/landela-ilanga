@@ -16,7 +16,7 @@ fn write_colour (vector : & Vec3) -> String {
 
 
 fn ray_color(r : &Ray, world : &dyn Hittable) -> Vec3{
-    let mut rec = HitRecord::new();
+    let mut rec = HitRecord::default();
     
     if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
         return 0.5 * (rec.normal + Vec3::new(1.0,1.0,1.0))
