@@ -1,6 +1,7 @@
-use landela_ilanga::objects::sphere::Sphere;
+use landela_ilanga::objects::{camera::Camera, sphere::Sphere};
 use landela_ilanga::structures::hittable::{HitRecord, Hittable, HittableList};
 use landela_ilanga::structures::{ray::Ray, vec3::Vec3};
+use landela_ilanga::utils::random_double;
 use std::fs::File;
 use std::io::Write;
 
@@ -8,14 +9,18 @@ fn main() {
     render_image();
 }
 
-fn write_colour(vector: &Vec3) -> String {
-    let colour = *vector * 255.99;
-    let output = format!(
-        "{} {} {}\n",
-        colour.r().floor(),
-        colour.g().floor(),
-        colour.b().floor()
-    );
+fn write_colour(pixel_colour: &Vec3, samples_per_pixel: u32) -> String {
+    // Divide the colour by the number of samples
+    let scale = 1.0 / samples_per_pixel as f64;
+    let mut colour = *pixel_colour * scale;
+    colour = Vec3::new(
+        colour.r().clamp(0.0, 0.999),
+        colour.g().clamp(0.0, 0.999),
+        colour.b().clamp(0.0, 0.999),
+    ) * 256.0;
+    colour.colourize();
+    // Write the translated [0,255] value of each color component
+    let output = format!("{} {} {}\n", colour.r(), colour.g(), colour.b());
     return output;
 }
 
@@ -35,6 +40,7 @@ fn render_image() {
     let aspect_ratio = 16.0 / 9.0;
     let image_width: u32 = 400;
     let image_height: u32 = (image_width as f64 / aspect_ratio) as u32;
+    let samples_per_pixel = 100;
 
     // World
     let sphere_a = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5);
@@ -44,32 +50,25 @@ fn render_image() {
     };
 
     // Camera
-    let viewport_height = 2.0;
-    let viewport_width = aspect_ratio * viewport_height;
-    let focal_length = 1.0;
-
-    let origin = Vec3::new(0.0, 0.0, 0.0);
-    let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_height, 0.0);
-    let lower_left_corner =
-        origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
+    let cam = Camera::new();
 
     // Render
     let mut output = format!("P3\n {} {} \n255\n", image_width, image_height);
 
     for j in (0..image_height).rev() {
         for i in 0..image_width {
-            let u: f64 = i as f64 / (image_width - 1) as f64;
-            let v: f64 = j as f64 / (image_height - 1) as f64;
-            let r = Ray::new(
-                origin,
-                lower_left_corner + (u as f64 * horizontal) + (v as f64 * vertical) - origin,
-            );
-            let pixel_colour = ray_color(&r, &world);
-            output.push_str(&write_colour(&pixel_colour));
+            let mut pixel_colour = Vec3::new(0.0, 0.0, 0.0);
+            // Antialiasing: taking multiple samples around the pixel
+            for _ in 0..samples_per_pixel {
+                let u: f64 = (i as f64 + random_double()) / (image_width - 1) as f64;
+                let v: f64 = (j as f64 + random_double()) / (image_height - 1) as f64;
+                let r = cam.get_ray(u, v);
+                pixel_colour += ray_color(&r, &world);
+            }
+            output.push_str(&write_colour(&pixel_colour, samples_per_pixel));
         }
     }
 
-    let mut file = File::create("./output/sphere_with_ground.ppm").unwrap();
+    let mut file = File::create("./output/antialiasing.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }

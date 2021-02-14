@@ -1,6 +1,6 @@
 use std::cmp::PartialEq;
 use std::f64;
-use std::ops::{Add, Div, Index, IndexMut, Mul, Neg, Sub};
+use std::ops::{Add, AddAssign, Div, Index, IndexMut, Mul, Neg, Sub};
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Vec3 {
@@ -55,6 +55,18 @@ impl Add for Vec3 {
 
     fn add(self, other: Vec3) -> Vec3 {
         Vec3 {
+            elements: [
+                self.x() + other.x(),
+                self.y() + other.y(),
+                self.z() + other.z(),
+            ],
+        }
+    }
+}
+
+impl AddAssign for Vec3 {
+    fn add_assign(&mut self, other: Vec3) {
+        *self = Vec3 {
             elements: [
                 self.x() + other.x(),
                 self.y() + other.y(),
