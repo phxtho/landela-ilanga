@@ -20,6 +20,10 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 
 ![6.1 Sphere normals](./images/sphere_normals.png)
 
-6.7 Sphere normals with ground
+6.7: Sphere normals with ground
 
 ![6.7 Sphere normals with ground](./images/sphere_with_ground.png)
+
+7: Antialiasing
+
+![7 Antialiasing](./images/antialiasing.png)
