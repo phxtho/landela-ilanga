@@ -27,3 +27,7 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 7: Antialiasing
 
 ![7 Antialiasing](./images/antialiasing.png)
+
+8.2 First render of a diffuse sphere
+
+![8.2 First render of a diffues sphere](./images/first_render_diffuse_sphere.png)

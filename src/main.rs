@@ -24,11 +24,16 @@ fn write_colour(pixel_colour: &Vec3, samples_per_pixel: u32) -> String {
     return output;
 }
 
-fn ray_color(r: &Ray, world: &dyn Hittable) -> Vec3 {
+fn ray_color(r: &Ray, world: &dyn Hittable, depth: u32) -> Vec3 {
+    // Exceeded the ray bounce limit, no more light is gathered
+    if depth <= 0 {
+        return Vec3::new(0.0, 0.0, 0.0);
+    }
+
     let mut rec = HitRecord::default();
     if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
         let target: Vec3 = rec.point + rec.normal + Vec3::random_in_unit_sphere();
-        return 0.5 * ray_color(&Ray::new(rec.point, target - rec.point), world);
+        return 0.5 * ray_color(&Ray::new(rec.point, target - rec.point), world, depth - 1);
     }
 
     let unit_direction = r.direction.unit_vector();
@@ -42,6 +47,7 @@ fn render_image() {
     let image_width: u32 = 400;
     let image_height: u32 = (image_width as f64 / aspect_ratio) as u32;
     let samples_per_pixel = 100;
+    let max_depth: u32 = 50;
 
     // World
     let sphere_a = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5);
@@ -64,12 +70,12 @@ fn render_image() {
                 let u: f64 = (i as f64 + random_double()) / (image_width - 1) as f64;
                 let v: f64 = (j as f64 + random_double()) / (image_height - 1) as f64;
                 let r = cam.get_ray(u, v);
-                pixel_colour += ray_color(&r, &world);
+                pixel_colour += ray_color(&r, &world, max_depth);
             }
             output.push_str(&write_colour(&pixel_colour, samples_per_pixel));
         }
     }
 
-    let mut file = File::create("./output/antialiasing.ppm").unwrap();
+    let mut file = File::create("./output/first_render_diffuse_sphere.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
