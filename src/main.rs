@@ -27,7 +27,8 @@ fn write_colour(pixel_colour: &Vec3, samples_per_pixel: u32) -> String {
 fn ray_color(r: &Ray, world: &dyn Hittable) -> Vec3 {
     let mut rec = HitRecord::default();
     if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
-        return 0.5 * (rec.normal + Vec3::new(1.0, 1.0, 1.0));
+        let target: Vec3 = rec.point + rec.normal + Vec3::random_in_unit_sphere();
+        return 0.5 * ray_color(&Ray::new(rec.point, target - rec.point), world);
     }
 
     let unit_direction = r.direction.unit_vector();

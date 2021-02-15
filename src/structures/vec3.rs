@@ -1,3 +1,4 @@
+use crate::utils::{random_double, random_range};
 use std::cmp::PartialEq;
 use std::f64;
 use std::ops::{Add, AddAssign, Div, Index, IndexMut, Mul, Neg, Sub};
@@ -204,5 +205,27 @@ impl Vec3 {
         self.elements[0] = self.elements[0].floor();
         self.elements[1] = self.elements[1].floor();
         self.elements[2] = self.elements[2].floor();
+    }
+
+    pub fn random() -> Vec3 {
+        return Vec3::new(random_double(), random_double(), random_double());
+    }
+
+    pub fn random_range(min: f64, max: f64) -> Vec3 {
+        return Vec3::new(
+            random_range(min, max),
+            random_range(min, max),
+            random_range(min, max),
+        );
+    }
+
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_range(-1.0, 1.0);
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
     }
 }
