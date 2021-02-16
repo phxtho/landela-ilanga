@@ -228,4 +228,14 @@ impl Vec3 {
             return p;
         }
     }
+
+    pub fn near_zero(&self) -> bool {
+        // Return true if the vector is close to zero in all dimensions.
+        let s = 1e-8;
+        return self.x().abs() < s && self.y().abs() < s && self.z().abs() < s;
+    }
+
+    pub fn reflect(v: &Vec3, n: &Vec3) -> Vec3 {
+        return *v - (2. * v.dot(n) * *n);
+    }
 }

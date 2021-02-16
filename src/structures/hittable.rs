@@ -1,4 +1,4 @@
-use crate::materials::Material;
+use crate::materials::{lambertian::Lambertian, material::Material};
 use crate::structures::ray::Ray;
 use crate::structures::vec3::Vec3;
 
@@ -16,7 +16,7 @@ impl HitRecord {
         return HitRecord {
             point: Vec3::default(),
             normal: Vec3::default(),
-            material: Material::Lambertian,
+            material: Material::Lambertian(Lambertian::new(Vec3::random_range(0.0, 1.0) * 255.0)),
             t: f64::default(),
             front_face: bool::default(),
         };

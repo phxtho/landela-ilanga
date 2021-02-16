@@ -1,7 +1,9 @@
+use landela_ilanga::materials::{lambertian::Lambertian, material::Material};
 use landela_ilanga::objects::{camera::Camera, sphere::Sphere};
 use landela_ilanga::structures::hittable::{HitRecord, Hittable, HittableList};
 use landela_ilanga::structures::{ray::Ray, vec3::Vec3};
 use landela_ilanga::utils::random_double;
+
 use std::fs::File;
 use std::io::Write;
 
@@ -50,8 +52,16 @@ fn render_image() {
     let max_depth: u32 = 50;
 
     // World
-    let sphere_a = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5);
-    let sphere_b = Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0);
+    let sphere_a = Sphere::new(
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+        Material::Lambertian(Lambertian::new(Vec3::new(255., 255., 0.))),
+    );
+    let sphere_b = Sphere::new(
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+        Material::Lambertian(Lambertian::new(Vec3::new(150., 255., 150.))),
+    );
     let world = HittableList {
         objects: vec![Box::new(sphere_a), Box::new(sphere_b)],
     };
