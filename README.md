@@ -24,7 +24,9 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 ![8.2 First render of a diffues sphere](./images/first_render_diffuse_sphere.png)
 ![8.6 Gamma corrected diffuse sphere](./images/gamma_corrected_diffuse_sphere.png)
 
-9.5 Specular reflection
+**9.5** Specular reflection, **9.6** Fuzzed metal material
 
 ![9.5 Specular reflection](./images/shiny_metal.png)
+![9.6 Fuzzed metal](./images/fuzzed_metal.png)
+
 

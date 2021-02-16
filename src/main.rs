@@ -66,8 +66,8 @@ fn render_image() {
     // World
     let material_ground = Material::Lambertian(Lambertian::new(Vec3::new(0.8, 0.8, 0.)));
     let material_center = Material::Lambertian(Lambertian::new(Vec3::new(0.7, 0.3, 0.3)));
-    let material_left = Material::Metal(Metal::new(Vec3::new(0.8, 0.8, 0.8)));
-    let material_right = Material::Metal(Metal::new(Vec3::new(0.8, 0.6, 0.2)));
+    let material_left = Material::Metal(Metal::new(Vec3::new(0.8, 0.8, 0.8),0.3));
+    let material_right = Material::Metal(Metal::new(Vec3::new(0.8, 0.6, 0.2),1.0));
 
     let ground = Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, material_ground);
     let sphere_center = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, material_center);
@@ -102,6 +102,6 @@ fn render_image() {
         }
     }
 
-    let mut file = File::create("./output/shiny_metal.ppm").unwrap();
+    let mut file = File::create("./output/fuzzed_metal.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
