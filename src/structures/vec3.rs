@@ -1,5 +1,5 @@
 use crate::utils::{random_double, random_range};
-use std::cmp::{Ord, PartialEq};
+use std::cmp::PartialEq;
 use std::f64;
 use std::ops::{Add, AddAssign, Div, Index, IndexMut, Mul, Neg, Sub};
 

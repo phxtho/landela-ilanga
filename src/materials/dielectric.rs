@@ -22,10 +22,17 @@ impl Scatterable for Dielectric {
         attenuation: &mut Vec3,
         scattered: &mut Ray,
     ) -> bool {
-        attenuation = Vec3::new(1.0,1.0,1.0);
-        let refraction_ratio = if rec.front_face {self.ir} else {1.0/self.ir};
+        *attenuation = Vec3::new(1.0, 1.0, 1.0);
+        let refraction_ratio = if rec.front_face {
+            self.ir
+        } else {
+            1.0 / self.ir
+        };
 
-        let unit_direction = r_in.direction().unit_vector();
-        let refracted = Vec3::refract(unit_direction, rec.normal, refraction_ratio);
+        let unit_direction = r_in.direction.unit_vector();
+        let refracted = Vec3::refract(&unit_direction, &rec.normal, refraction_ratio);
+
+        *scattered = Ray::new(rec.point, refracted);
+        return true;
     }
 }
