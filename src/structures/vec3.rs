@@ -1,5 +1,5 @@
 use crate::utils::{random_double, random_range};
-use std::cmp::PartialEq;
+use std::cmp::{Ord, PartialEq};
 use std::f64;
 use std::ops::{Add, AddAssign, Div, Index, IndexMut, Mul, Neg, Sub};
 
@@ -237,5 +237,15 @@ impl Vec3 {
 
     pub fn reflect(v: &Vec3, n: &Vec3) -> Vec3 {
         return *v - (2. * v.dot(n) * *n);
+    }
+
+    // implementation of snells law
+    pub fn refract(uv: &Vec3, n: &Vec3, etai_over_etat: f64) -> Vec3 {
+        let ab = -uv.unit_vector().dot(n);
+        let cos_theta: f64 = if ab < 1.0 { ab } else { 1.0 };
+        let r_out_perp = etai_over_etat * (*uv + (cos_theta * *n));
+        let discriminant: f64 = (1.0 - r_out_perp.length_squared() as f64).abs();
+        let r_out_parrallel: Vec3 = -discriminant.sqrt() * *n;
+        return r_out_perp + r_out_parrallel;
     }
 }
