@@ -31,3 +31,7 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 8.2 First render of a diffuse sphere
 
 ![8.2 First render of a diffues sphere](./images/first_render_diffuse_sphere.png)
+
+8.6 Gamma corrected diffuse sphere
+
+![8.6 Gamma corrected diffuse sphere](./images/gamma_corrected_diffuse_sphere.png)

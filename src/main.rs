@@ -14,9 +14,9 @@ fn write_colour(pixel_colour: &Vec3, samples_per_pixel: u32) -> String {
     let scale = 1.0 / samples_per_pixel as f64;
     let mut colour = *pixel_colour * scale;
     colour = Vec3::new(
-        colour.r().clamp(0.0, 0.999),
-        colour.g().clamp(0.0, 0.999),
-        colour.b().clamp(0.0, 0.999),
+        colour.r().sqrt().clamp(0.0, 0.999),
+        colour.g().sqrt().clamp(0.0, 0.999),
+        colour.b().sqrt().clamp(0.0, 0.999),
     ) * 256.0;
     colour.colourize();
     // Write the translated [0,255] value of each color component
@@ -31,8 +31,8 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: u32) -> Vec3 {
     }
 
     let mut rec = HitRecord::default();
-    if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
-        let target: Vec3 = rec.point + rec.normal + Vec3::random_in_unit_sphere();
+    if world.hit(r, 0.001, f64::INFINITY, &mut rec) {
+        let target: Vec3 = rec.point + rec.normal + Vec3::random_in_unit_sphere().unit_vector();
         return 0.5 * ray_color(&Ray::new(rec.point, target - rec.point), world, depth - 1);
     }
 
@@ -76,6 +76,6 @@ fn render_image() {
         }
     }
 
-    let mut file = File::create("./output/first_render_diffuse_sphere.ppm").unwrap();
+    let mut file = File::create("./output/gamma_corrected_diffuse_sphere.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }
