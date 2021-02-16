@@ -29,8 +29,9 @@ Ray tracer but in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela
 ![9.5 Specular reflection](./images/shiny_metal.png)
 ![9.6 Fuzzed metal](./images/fuzzed_metal.png)
 
-**10.2** Dielectric that always refracts
+**10.2** Dielectric that always refracts, **10.4** Glass with total internal reflection
 
-![10.2 Glass sphere that always refracts](images/glass_that_always_refracts.png)
+![10.2 Glass sphere that always refracts](./images/glass_that_always_refracts.png)
+![10.4 Glass with total internal reflection](./images/glass_internal_reflection.png)
 
 
