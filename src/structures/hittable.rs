@@ -1,15 +1,27 @@
+use crate::materials::Material;
 use crate::structures::ray::Ray;
 use crate::structures::vec3::Vec3;
 
-#[derive(Clone, Copy, Default)]
+#[derive(Clone, Copy)]
 pub struct HitRecord {
     pub point: Vec3,
     pub normal: Vec3,
+    pub material: Material,
     pub t: f64,
     pub front_face: bool,
 }
 
 impl HitRecord {
+    pub fn new() -> HitRecord {
+        return HitRecord {
+            point: Vec3::default(),
+            normal: Vec3::default(),
+            material: Material::Lambertian,
+            t: f64::default(),
+            front_face: bool::default(),
+        };
+    }
+
     pub fn set_face_normal(&mut self, r: &Ray, outward_nomral: &Vec3) {
         self.front_face = r.direction.dot(outward_nomral) < 0.0;
         self.normal = if self.front_face {
