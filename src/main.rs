@@ -1,4 +1,8 @@
-use landela_ilanga::materials::{lambertian::Lambertian, material::Material};
+use landela_ilanga::materials::{
+    lambertian::Lambertian,
+    material::{Material, Scatterable},
+    metal::Metal,
+};
 use landela_ilanga::objects::{camera::Camera, sphere::Sphere};
 use landela_ilanga::structures::hittable::{HitRecord, Hittable, HittableList};
 use landela_ilanga::structures::{ray::Ray, vec3::Vec3};
@@ -34,8 +38,16 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: u32) -> Vec3 {
 
     let mut rec = HitRecord::new();
     if world.hit(r, 0.001, f64::INFINITY, &mut rec) {
-        let target: Vec3 = rec.point + rec.normal + Vec3::random_in_unit_sphere().unit_vector();
-        return 0.5 * ray_color(&Ray::new(rec.point, target - rec.point), world, depth - 1);
+        let mut scattered: Ray = Ray::default();
+        let mut attenuation: Vec3 = Vec3::default();
+        if rec
+            .material
+            .scatter(r, &rec, &mut attenuation, &mut scattered)
+        {
+            return attenuation * ray_color(&scattered, world, depth - 1);
+        }
+
+        return Vec3::new(0., 0., 0.);
     }
 
     let unit_direction = r.direction.unit_vector();
@@ -52,18 +64,22 @@ fn render_image() {
     let max_depth: u32 = 50;
 
     // World
-    let sphere_a = Sphere::new(
-        Vec3::new(0.0, 0.0, -1.0),
-        0.5,
-        Material::Lambertian(Lambertian::new(Vec3::new(255., 255., 0.))),
-    );
-    let sphere_b = Sphere::new(
-        Vec3::new(0.0, -100.5, -1.0),
-        100.0,
-        Material::Lambertian(Lambertian::new(Vec3::new(150., 255., 150.))),
-    );
+    let material_ground = Material::Lambertian(Lambertian::new(Vec3::new(0.8, 0.8, 0.)));
+    let material_center = Material::Lambertian(Lambertian::new(Vec3::new(0.8, 0.8, 0.)));
+    let material_left = Material::Metal(Metal::new(Vec3::new(0.8, 0.8, 0.)));
+    let material_right = Material::Metal(Metal::new(Vec3::new(0.8, 0.8, 0.)));
+
+    let ground = Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0, material_ground);
+    let sphere_center = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5, material_center);
+    let sphere_left = Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5, material_left);
+    let sphere_right = Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5, material_right);
     let world = HittableList {
-        objects: vec![Box::new(sphere_a), Box::new(sphere_b)],
+        objects: vec![
+            Box::new(ground),
+            Box::new(sphere_center),
+            Box::new(sphere_left),
+            Box::new(sphere_right),
+        ],
     };
 
     // Camera
@@ -86,6 +102,6 @@ fn render_image() {
         }
     }
 
-    let mut file = File::create("./output/gamma_corrected_diffuse_sphere.ppm").unwrap();
+    let mut file = File::create("./output/shiny_metal.ppm").unwrap();
     file.write_all(output.as_bytes()).unwrap()
 }

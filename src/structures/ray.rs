@@ -1,7 +1,7 @@
 use crate::structures::vec3::Vec3;
 use std::cmp::PartialEq;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, Default)]
 pub struct Ray {
     pub origin: Vec3,
     pub direction: Vec3,
