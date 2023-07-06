@@ -1,6 +1,6 @@
 # landela-ilanga
 
-Landela iLanga means Follow the Sun in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela%20ilanga&op=translate), it's a rust implentation of ray tracer based off of [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+Landela iLanga means "Follow the Sun" in [Xhosa](https://translate.google.com/?sl=xh&tl=en&text=landela%20ilanga&op=translate), it's a rust implentation of ray tracer based off of [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
 ## Progress
 
